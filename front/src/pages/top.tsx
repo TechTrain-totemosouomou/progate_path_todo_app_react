@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Task, TODO, DONE } from "@/types";
-import { getTasks, addTask } from "@/api";
+import { getTasks, addTask, markTaskAsDone } from "@/api";
 
 export function Top() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -32,6 +32,17 @@ export function Top() {
     }
   };
 
+  const handleMarkTaskAsDone = async (taskId: number) => {
+    try {
+      await markTaskAsDone(taskId);
+      setTasks(tasks.map(task =>
+        task.id === taskId ? { ...task, status: DONE } : task
+      ));
+    } catch (error) {
+      console.error('Error marking task as done:', error);
+    }
+  };
+
   return (
     <div>
       <form onSubmit={handleAddTask}>
@@ -51,7 +62,7 @@ export function Top() {
           />
         </div>
       </form>
-      <TaskList tasks={tasks} />
+      <TaskList tasks={tasks} onTaskDone={handleMarkTaskAsDone} />
       <div className="text-gray-500 hover:text-gray-400 text-right text-lg mt-4 mb-6">
         <button type="button" data-test="clear_btn">
           clear all done tasks
@@ -61,24 +72,30 @@ export function Top() {
   );
 }
 
-function TaskList({ tasks }: { tasks: Task[] }) {
+function TaskList({ tasks, onTaskDone }: { tasks: Task[], onTaskDone: (taskId: number) => void }) {
   return (
     <ul data-test="tasks">
       {tasks.map((task) => (
         <li key={task.id}>
-          <TaskItem task={task} />
+          <TaskItem task={task} onTaskDone={onTaskDone} />
         </li>
       ))}
     </ul>
   );
 }
 
-function TaskItem({ task }: { task: Task }) {
+function TaskItem({ task, onTaskDone }: { task: Task, onTaskDone: (taskId: number) => void }) {
+  const handleTaskDone = () => {
+    if (task.status === TODO) {
+      onTaskDone(task.id);
+    }
+  };
+
   return (
     <div className="flex border-b text-2xl p-6">
       <div className="flex-none">
         {task.status === TODO ? (
-          <div className="task_btn" />
+          <div className="task_btn" onClick={handleTaskDone} />
         ) : (
           <div className="task_btn done" />
         )}

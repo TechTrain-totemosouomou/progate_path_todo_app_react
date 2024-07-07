@@ -25,3 +25,14 @@ export async function addTask(title: string): Promise<Task> {
   const task: Task = await response.json();
   return task;
 }
+
+export async function markTaskAsDone(taskId: number): Promise<void> {
+  const response = await fetch(`/api/tasks/${taskId}/done`, {
+    method: 'POST',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to mark task as done');
+  }
+}
+
