@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Task, TODO, DONE } from "@/types";
-import { getTasks } from "@/api";
+import { getTasks, addTask } from "@/api";
 
 export function Top() {
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [newTaskTitle, setNewTaskTitle] = useState<string>('');
 
   useEffect(() => {
     async function fetchTasks() {
@@ -18,13 +19,27 @@ export function Top() {
     fetchTasks();
   }, []);
 
+  const handleAddTask = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!newTaskTitle.trim()) return;
+
+    try {
+      const newTask = await addTask(newTaskTitle.trim());
+      setTasks([...tasks, newTask]);
+      setNewTaskTitle('');
+    } catch (error) {
+      console.error('Error adding task:', error);
+    }
+  };
+
   return (
     <div>
-      <form>
+      <form onSubmit={handleAddTask}>
         <div className="flex">
           <input
             name="title"
-            value=""
+            value={newTaskTitle}
+            onChange={(e) => setNewTaskTitle(e.target.value)}
             className="grow mr-4 h-12 p-4 border-soid border border-gray-300 focus:outline-none focus:border-violet-500"
             data-test="input-title"
             placeholder="Add your new todo"
@@ -32,6 +47,7 @@ export function Top() {
           <button
             data-test="submit"
             className="flex-none submit_btn text-white bg-blue-800"
+            type="submit"
           />
         </div>
       </form>
