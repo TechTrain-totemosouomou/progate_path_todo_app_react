@@ -1,28 +1,23 @@
+import React, { useEffect, useState } from 'react';
 import { Task, TODO, DONE } from "@/types";
+import { getTasks } from "@/api";
 
 export function Top() {
-  const tasks: Task[] = [
-    {
-      id: 1,
-      title: "title1",
-      status: DONE,
-    },
-    {
-      id: 2,
-      title: "title2",
-      status: TODO,
-    },
-    {
-      id: 3,
-      title: "title3",
-      status: DONE,
-    },
-    {
-      id: 4,
-      title: "title4",
-      status: TODO,
-    },
-  ];
+  const [tasks, setTasks] = useState<Task[]>([]);
+
+  useEffect(() => {
+    async function fetchTasks() {
+      try {
+        const fetchedTasks = await getTasks();
+        setTasks(fetchedTasks);
+      } catch (error) {
+        console.error('Error fetching tasks:', error);
+      }
+    }
+
+    fetchTasks();
+  }, []);
+
   return (
     <div>
       <form>
