@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { Task, TODO, DONE } from "@/types";
 import { getTasks, addTask, markTaskAsDone, clearAllDoneTasks } from "@/api";
 
 export function Top() {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [newTaskTitle, setNewTaskTitle] = useState<string>('');
+  const [newTaskTitle, setNewTaskTitle] = useState<string>("");
 
   useEffect(() => {
     async function fetchTasks() {
@@ -12,7 +12,7 @@ export function Top() {
         const fetchedTasks = await getTasks();
         setTasks(fetchedTasks);
       } catch (error) {
-        console.error('Error fetching tasks:', error);
+        console.error("Error fetching tasks:", error);
       }
     }
 
@@ -26,29 +26,31 @@ export function Top() {
     try {
       const newTask = await addTask(newTaskTitle.trim());
       setTasks([...tasks, newTask]);
-      setNewTaskTitle('');
+      setNewTaskTitle("");
     } catch (error) {
-      console.error('Error adding task:', error);
+      console.error("Error adding task:", error);
     }
   };
 
   const handleMarkTaskAsDone = async (taskId: number) => {
     try {
       await markTaskAsDone(taskId);
-      setTasks(tasks.map(task =>
-        task.id === taskId ? { ...task, status: DONE } : task
-      ));
+      setTasks(
+        tasks.map((task) =>
+          task.id === taskId ? { ...task, status: DONE } : task
+        )
+      );
     } catch (error) {
-      console.error('Error marking task as done:', error);
+      console.error("Error marking task as done:", error);
     }
   };
 
   const handleClearAllDoneTasks = async () => {
     try {
       await clearAllDoneTasks();
-      setTasks(tasks.filter(task => task.status !== DONE));
+      setTasks(tasks.filter((task) => task.status !== DONE));
     } catch (error) {
-      console.error('Error clearing done tasks:', error);
+      console.error("Error clearing done tasks:", error);
     }
   };
 
@@ -73,7 +75,11 @@ export function Top() {
       </form>
       <TaskList tasks={tasks} onTaskDone={handleMarkTaskAsDone} />
       <div className="text-gray-500 hover:text-gray-400 text-right text-lg mt-4 mb-6">
-        <button type="button" data-test="clear_btn" onClick={handleClearAllDoneTasks}>
+        <button
+          type="button"
+          data-test="clear_btn"
+          onClick={handleClearAllDoneTasks}
+        >
           clear all done tasks
         </button>
       </div>
@@ -81,7 +87,13 @@ export function Top() {
   );
 }
 
-function TaskList({ tasks, onTaskDone }: { tasks: Task[], onTaskDone: (taskId: number) => void }) {
+function TaskList({
+  tasks,
+  onTaskDone,
+}: {
+  tasks: Task[];
+  onTaskDone: (taskId: number) => void;
+}) {
   return (
     <ul data-test="tasks">
       {tasks.map((task) => (
@@ -93,7 +105,13 @@ function TaskList({ tasks, onTaskDone }: { tasks: Task[], onTaskDone: (taskId: n
   );
 }
 
-function TaskItem({ task, onTaskDone }: { task: Task, onTaskDone: (taskId: number) => void }) {
+function TaskItem({
+  task,
+  onTaskDone,
+}: {
+  task: Task;
+  onTaskDone: (taskId: number) => void;
+}) {
   const handleTaskDone = () => {
     if (task.status === TODO) {
       onTaskDone(task.id);
