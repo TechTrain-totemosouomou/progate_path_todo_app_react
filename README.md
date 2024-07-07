@@ -1,8 +1,8 @@
 # React TODO App
-npm ci
-npm npm audit fix
-npm run db:reset
+1. npm ci
+2. npm npm audit fix
+3. npm run db:reset
 
 # command
-npm run watch:api
-npm run watch:front
+1. npm run watch:api
+2. npm run watch:front
