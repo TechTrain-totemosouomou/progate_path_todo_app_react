@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.task_btn::before {
+  content: "";
+  top: 5px;
+  left: 5px;
+  width: 10px;
+  height: 7px;
+  transform: rotate(-45deg);
+  position: absolute;
+  border-left: 2px solid white;
+  border-bottom: 2px solid white;
+}
+
+.task_btn.done {
+  background-color: orange;
+  cursor: not-allowed;
+}
+
+.task_btn {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #ddd;
+  cursor: pointer;
+}
+
+.submit_btn {
+  height: 50px;
+  width: 50px;
+  background-color: blueviolet;
+  position: relative;
+}
+
+.submit_btn::after,
+.submit_btn::before {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 20px;
+  background-color: white;
+  top: calc((50px - 2px) / 2);
+  left: calc((50px - 20px) / 2);
+}
+
+.submit_btn::before {
+  transform: rotate(90deg);
+}

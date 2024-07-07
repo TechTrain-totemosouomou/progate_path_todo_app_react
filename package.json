@@ -1,0 +1,23 @@
+{
+  "name": "todo_app_react",
+  "scripts": {
+    "db:reset": "npm run db:reset -w ./api",
+    "watch:api": "npm run watch -w ./api",
+    "watch:front": "npm run watch -w ./front",
+    "test": "npm run test -w ./e2e",
+    "test:get_tasks": "npm run test:get_tasks -w ./e2e",
+    "test:add_task": "npm run test:add_task -w ./e2e",
+    "test:done_task": "npm run test:done_task -w ./e2e",
+    "test:clear_all_done_tasks": "npm run test:clear_all_done_tasks -w ./e2e",
+    "lint:check": "npm run lint:check -w ./api && npm run lint:check -w ./front",
+    "lint:fix": "npm run lint:fix -w ./api && npm run lint:fix -w ./front",
+    "format:check": "npm run format:check -w ./api && npm run format:check -w ./front",
+    "format:fix": "npm run format:fix -w ./api && npm run format:fix -w ./front"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "workspaces": [
+    "api",
+    "e2e",
+    "front"
+  ]
+}
