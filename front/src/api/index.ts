@@ -36,3 +36,13 @@ export async function markTaskAsDone(taskId: number): Promise<void> {
   }
 }
 
+export async function clearAllDoneTasks(): Promise<void> {
+  const response = await fetch('/api/done_tasks', {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to clear done tasks');
+  }
+}
+

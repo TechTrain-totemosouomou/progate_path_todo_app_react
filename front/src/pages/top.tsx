@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Task, TODO, DONE } from "@/types";
-import { getTasks, addTask, markTaskAsDone } from "@/api";
+import { getTasks, addTask, markTaskAsDone, clearAllDoneTasks } from "@/api";
 
 export function Top() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -43,6 +43,15 @@ export function Top() {
     }
   };
 
+  const handleClearAllDoneTasks = async () => {
+    try {
+      await clearAllDoneTasks();
+      setTasks(tasks.filter(task => task.status !== DONE));
+    } catch (error) {
+      console.error('Error clearing done tasks:', error);
+    }
+  };
+
   return (
     <div>
       <form onSubmit={handleAddTask}>
@@ -64,7 +73,7 @@ export function Top() {
       </form>
       <TaskList tasks={tasks} onTaskDone={handleMarkTaskAsDone} />
       <div className="text-gray-500 hover:text-gray-400 text-right text-lg mt-4 mb-6">
-        <button type="button" data-test="clear_btn">
+        <button type="button" data-test="clear_btn" onClick={handleClearAllDoneTasks}>
           clear all done tasks
         </button>
       </div>
